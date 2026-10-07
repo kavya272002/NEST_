@@ -543,6 +543,26 @@ body {
     color: var(--text-secondary);
 }
 
+.icon-btn-tile-share {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--dur-fast);
+}
+
+.icon-btn-tile-share:hover {
+    background: var(--accent-dark);
+    color: #FFFFFF;
+    border-color: var(--accent-dark);
+}
+
 .doc-tile-title {
     font-size: 0.95rem;
     font-weight: 700;
@@ -683,3 +703,90 @@ body {
 .toast.show {
     transform: translateX(-50%) translateY(0);
 }
+
+/* ── MOBILE RESPONSIVE SYSTEM (<640px) ── */
+@media (max-width: 640px) {
+    .app-container {
+        padding: 0.5rem 0.35rem;
+    }
+    
+    .system-card {
+        border-radius: var(--radius-lg);
+        padding: 1rem 0.85rem;
+    }
+
+    .system-header {
+        padding-bottom: 0.75rem;
+    }
+
+    .brand-name {
+        font-size: 1.15rem;
+    }
+
+    .system-tools {
+        gap: 0.35rem;
+    }
+
+    .icon-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .toolbar-top {
+        flex-direction: column;
+        gap: 0.65rem;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .btn-add-doc-sleek {
+        width: 100%;
+        justify-content: center;
+        height: 42px;
+        font-size: 0.95rem;
+    }
+
+    /* Native Horizontal Swipe Carousels for Mobile */
+    .folder-chips-scroll, .cat-pills-row {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        gap: 0.5rem;
+        padding-bottom: 6px;
+        margin-left: -0.25rem;
+        margin-right: -0.25rem;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
+
+    .folder-chips-scroll::-webkit-scrollbar,
+    .cat-pills-row::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    .folder-chip, .cat-pill {
+        flex-shrink: 0 !important;
+        scroll-snap-align: start;
+        white-space: nowrap;
+        font-size: 0.8rem;
+        padding: 0.45rem 0.85rem;
+    }
+
+    .docs-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .modal {
+        padding: 1.25rem 1rem;
+        max-height: 85vh;
+        border-radius: var(--radius-lg);
+    }
+}
+

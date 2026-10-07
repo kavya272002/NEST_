@@ -159,3 +159,88 @@ const TRANSLATIONS = {
 function t(key, lang = 'en') {
     return TRANSLATIONS[lang]?.[key] || TRANSLATIONS.en[key] || key;
 }
+
+function applyLanguage(lang = 'en') {
+    const isHi = lang === 'hi';
+
+    // Search Box Placeholder
+    const searchInput = document.getElementById('doc-search-input');
+    if (searchInput) {
+        searchInput.placeholder = isHi ? "दस्तावेज़, परिवार के सदस्य या नोट्स खोजें..." : "Search documents, family member, or notes...";
+    }
+
+    // Add Document Button
+    const addDocBtnSpan = document.querySelector('#btn-add-doc span');
+    if (addDocBtnSpan) {
+        addDocBtnSpan.textContent = isHi ? "दस्तावेज़ जोड़ें" : "Add Document";
+    }
+
+    // Category Filter Pills
+    const categoryMap = {
+        'all': isHi ? 'सभी फाइलें' : 'All Files',
+        'Marksheets & Education': isHi ? 'मार्कशीट एवं शिक्षा' : 'Marksheets & Education',
+        'Identity (Aadhaar/PAN/Passport)': isHi ? 'पहचान पत्र (आधार/पैन)' : 'Identity (Aadhaar/PAN/Passport)',
+        'Insurance': isHi ? 'बीमा पॉलिसी' : 'Insurance',
+        'Finance & Tax': isHi ? 'वित्त एवं टैक्स' : 'Finance & Tax',
+        'Property & Bills': isHi ? 'संपत्ति एवं बिल' : 'Property & Bills',
+        'Other': isHi ? 'अन्य' : 'Other'
+    };
+
+    document.querySelectorAll('.cat-pill').forEach(pill => {
+        const cat = pill.dataset.category;
+        if (cat && categoryMap[cat]) {
+            pill.textContent = categoryMap[cat];
+        }
+    });
+
+    // Form Labels inside Add Document Modal
+    const formLabels = {
+        'doc-name': isHi ? 'दस्तावेज़ का नाम / शीर्षक' : 'Document Title / Name',
+        'doc-category': isHi ? 'श्रेणी' : 'Category',
+        'doc-holder': isHi ? 'परिवार का सदस्य / मालिक' : 'Family Member / Owner',
+        'doc-number': isHi ? 'दस्तावेज़ नंबर (वैकल्पिक)' : 'Document Number (Optional)',
+        'doc-issued': isHi ? 'जारी तिथि (वैकल्पिक)' : 'Issue Date (Optional)',
+        'doc-expiry': isHi ? 'समाप्ति तिथि (वैकल्पिक)' : 'Expiry Date (Optional)',
+        'doc-notes': isHi ? 'टिप्पणी / नोट्स' : 'Notes / Remarks',
+        'doc-file': isHi ? 'फोटो / फाइल अपलोड करें (अधिकतम 10MB)' : 'Upload Photo / File (Max 10MB)'
+    };
+
+    for (const [forAttr, labelText] of Object.entries(formLabels)) {
+        const label = document.querySelector(`label[for="${forAttr}"]`);
+        if (label) label.textContent = labelText;
+    }
+
+    // Submit button inside form-document
+    const saveBtn = document.querySelector('#form-document button[type="submit"]');
+    if (saveBtn) saveBtn.textContent = isHi ? 'दस्तावेज़ सुरक्षित सहेजें' : 'Save Document Securely';
+
+    // Add Member button inside folder chips
+    const addMemberChip = document.getElementById('btn-add-member');
+    if (addMemberChip) {
+        addMemberChip.innerHTML = isHi ? '<span>+ नया सदस्य</span>' : '<span>+ Add Member</span>';
+    }
+
+    // Language indicator button
+    const indicator = document.getElementById('lang-indicator');
+    if (indicator) {
+        indicator.textContent = isHi ? 'हि' : 'EN';
+    }
+
+    // Translate elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        const translation = t(key, lang);
+        if (translation) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = translation;
+            } else {
+                el.textContent = translation;
+            }
+        }
+    });
+}
+
+window.i18n = {
+    t,
+    applyLanguage
+};

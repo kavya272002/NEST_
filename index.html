@@ -119,10 +119,6 @@
                     </div>
 
                     <div class="system-tools">
-                        <button id="btn-family-sync-top" class="btn-secondary" title="Family Sync Code">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                            <span>Family Sync</span>
-                        </button>
                         <button id="btn-lang-toggle" class="icon-btn" title="Language">
                             <span id="lang-indicator" style="font-size:0.75rem; font-weight:700;">EN</span>
                         </button>
@@ -298,31 +294,14 @@
                     <div style="grid-column: 1 / -1;"><span class="detail-label">Notes:</span><p id="detail-doc-notes" style="font-size:0.9rem; color:var(--text-secondary);"></p></div>
                 </div>
             </div>
-            <div class="modal-footer" style="margin-top:1.25rem; display:flex; gap:0.5rem;">
-                <a id="detail-doc-download" class="btn-primary" download target="_blank" style="display:none; flex:1; text-align:center; text-decoration:none;">Download File</a>
-                <button id="btn-delete-doc-modal" class="btn-secondary" style="background:var(--danger-bg); color:var(--danger); border-color:transparent;">Delete Document</button>
+            <div class="modal-footer" style="margin-top:1.25rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <button id="btn-share-doc-modal" class="btn-primary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; flex:1;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    <span>Share Document</span>
+                </button>
+                <a id="detail-doc-download" class="btn-secondary" download target="_blank" style="display:none; flex:1; text-align:center; text-decoration:none; justify-content:center;">Download File</a>
+                <button id="btn-delete-doc-modal" class="btn-secondary" style="background:var(--danger-bg); color:var(--danger); border-color:transparent;">Delete</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Family Sync Modal (Small) -->
-    <div id="modal-qr" class="modal-overlay">
-        <div class="modal" style="max-width:380px; text-align:center;">
-            <div class="modal-header">
-                <h3>Family Sync Code</h3>
-                <button class="modal-close" data-modal="modal-qr">&times;</button>
-            </div>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Share this encrypted sync code with family members to link devices.</p>
-            
-            <div style="background:var(--bg-subtle); border:1px dashed var(--border-strong); border-radius:8px; padding:0.6rem; font-weight:800; font-size:1.1rem; color:var(--accent-dark); margin-bottom:1rem;">
-                <span id="txt-household-id">NEST-XXXX-XXXX</span>
-            </div>
-
-            <div id="qr-display" style="display:flex; justify-content:center; margin:1rem 0;"></div>
-            
-            <button id="btn-copy-link" class="btn-secondary btn-full" onclick="copyInviteLink(event)">
-                <span>Copy Sync Link</span>
-            </button>
         </div>
     </div>
 
@@ -374,7 +353,6 @@
     <script src="https://unpkg.com/dexie@3.2.7/dist/dexie.min.js"></script>
     <script src="./db.js"></script>
     <script src="./translations.js"></script>
-    <script src="./sync.js"></script>
     <script src="./app.js"></script>
 </body>
 </html>

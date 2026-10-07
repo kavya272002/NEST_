@@ -92,6 +92,10 @@
         const app = document.getElementById('app');
         app.classList.remove('hidden');
 
+        if (window.i18n && window.i18n.applyLanguage) {
+            window.i18n.applyLanguage(currentLang);
+        }
+
         setupModals();
         setupForms();
         setupExportImport();
@@ -230,7 +234,12 @@
             <div class="doc-tile" onclick="NestApp.viewDocument(${doc.id})">
                 <div class="doc-tile-top">
                     <div class="doc-icon-box">${iconSvg}</div>
-                    ${doc.holder ? `<span class="doc-member-tag">${escapeHtml(doc.holder)}</span>` : ''}
+                    <div style="display:flex; align-items:center; gap:0.35rem;">
+                        ${doc.holder ? `<span class="doc-member-tag">${escapeHtml(doc.holder)}</span>` : ''}
+                        <button class="icon-btn-tile-share" title="Share Document" onclick="event.stopPropagation(); NestApp.shareDocument(${doc.id})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        </button>
+                    </div>
                 </div>
                 <div>
                     <div class="doc-tile-title">${escapeHtml(doc.name)}</div>
@@ -261,15 +270,23 @@
 
         const previewDiv = document.getElementById('detail-doc-preview');
         const downloadBtn = document.getElementById('detail-doc-download');
+        const shareBtn = document.getElementById('btn-share-doc-modal');
 
         if (doc.image) {
             previewDiv.innerHTML = `<img src="${doc.image}" alt="${escapeHtml(doc.name)}" style="max-width:100%; max-height:280px; object-fit:contain;">`;
             downloadBtn.href = doc.image;
             downloadBtn.download = `${doc.name.replace(/\s+/g, '_')}`;
-            downloadBtn.style.display = 'block';
+            downloadBtn.style.display = 'inline-flex';
         } else {
             previewDiv.innerHTML = `<div style="padding:2rem; color:var(--text-muted); text-align:center;">No File Attachment</div>`;
             downloadBtn.style.display = 'none';
+        }
+
+        if (shareBtn) {
+            shareBtn.style.display = 'inline-flex';
+            shareBtn.onclick = () => {
+                shareDocument(doc.id);
+            };
         }
 
         const deleteBtn = document.getElementById('btn-delete-doc-modal');
@@ -281,6 +298,57 @@
         }
 
         openModal('modal-doc-detail');
+    }
+
+    async function shareDocument(id) {
+        const doc = await DocumentDB.get(id);
+        if (!doc) return;
+
+        showToast('Preparing document...');
+
+        if (!doc.image) {
+            const shareText = `📌 *NEST Vault Document*\n\n📄 *Name:* ${doc.name}\n👤 *Member:* ${doc.holder || 'Self'}\n📂 *Category:* ${doc.category || 'General'}${doc.number ? `\n🔢 *Number:* ${doc.number}` : ''}`;
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: doc.name, text: shareText });
+                    return;
+                } catch (e) {}
+            }
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+            return;
+        }
+
+        try {
+            const res = await fetch(doc.image);
+            const blob = await res.blob();
+            
+            let ext = 'png';
+            if (blob.type.includes('pdf')) ext = 'pdf';
+            else if (blob.type.includes('jpeg') || blob.type.includes('jpg')) ext = 'jpg';
+            else if (blob.type.includes('webp')) ext = 'webp';
+
+            const fileName = `${doc.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.${ext}`;
+            const file = new File([blob], fileName, { type: blob.type || 'image/png' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: doc.name,
+                    text: `NEST Document: ${doc.name}`
+                });
+                showToast('Shared successfully');
+            } else if (navigator.share) {
+                await navigator.share({
+                    title: doc.name,
+                    text: `Document: ${doc.name} (${doc.holder || 'NEST Locker'})`
+                });
+            } else {
+                const shareText = `📌 *NEST Vault Document*\n📄 *Name:* ${doc.name}\n👤 *Member:* ${doc.holder || 'Self'}`;
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+            }
+        } catch (err) {
+            showToast('Sharing failed: ' + err.message);
+        }
     }
 
     async function deleteDocument(id, name) {
@@ -310,9 +378,6 @@
 
         const btnAddDoc = document.getElementById('btn-add-doc');
         if (btnAddDoc) btnAddDoc.addEventListener('click', () => openModal('modal-document'));
-
-        const btnSyncTop = document.getElementById('btn-family-sync-top');
-        if (btnSyncTop) btnSyncTop.addEventListener('click', handleInviteGeneration);
     }
 
     function openModal(id) {
@@ -546,8 +611,10 @@
                     profile.language = currentLang;
                     await ProfileDB.save(profile);
                 }
-                const indicator = document.getElementById('lang-indicator');
-                if (indicator) indicator.textContent = currentLang === 'hi' ? 'हि' : 'EN';
+                if (window.i18n && window.i18n.applyLanguage) {
+                    window.i18n.applyLanguage(currentLang);
+                }
+                await refreshDocuments();
                 showToast(currentLang === 'hi' ? 'भाषा हिन्दी में बदली गई' : 'Language set to English');
             });
         }
@@ -577,9 +644,11 @@
                 await MemberDB.add({ name: 'Self (' + userName + ')', relation: 'Self' });
             }
 
+            if (window.i18n && window.i18n.applyLanguage) {
+                window.i18n.applyLanguage(currentLang);
+            }
+
             closeModal('modal-settings');
-            const indicator = document.getElementById('lang-indicator');
-            if (indicator) indicator.textContent = currentLang === 'hi' ? 'हि' : 'EN';
             await refreshFamilyFolders();
             await refreshDocuments();
             showToast('Settings saved');
@@ -626,10 +695,24 @@
         }
     }
 
+    function showConfirm(message, onConfirm) {
+        const msgEl = document.getElementById('confirm-message');
+        const btnYes = document.getElementById('btn-confirm-yes');
+        if (msgEl) msgEl.textContent = message;
+        
+        if (btnYes) {
+            btnYes.onclick = async () => {
+                closeModal('modal-confirm');
+                if (onConfirm) await onConfirm();
+            };
+        }
+        openModal('modal-confirm');
+    }
+
     window.NestApp = window.KoshApp = {
         viewDocument,
         deleteDocument,
-        copyInviteLink
+        shareDocument
     };
 
     document.addEventListener('DOMContentLoaded', initSplash);
