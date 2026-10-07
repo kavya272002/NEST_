@@ -339,16 +339,13 @@
 
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share({
-                            files: [file],
-                            title: shareTitle,
-                            text: shareText
+                            files: [file]
                         });
                         showToast('Shared successfully');
                         return;
                     } else if (navigator.share) {
                         await navigator.share({
-                            title: shareTitle,
-                            text: shareText
+                            files: [file]
                         });
                         return;
                     }
@@ -715,12 +712,20 @@
     function showConfirm(message, onConfirm) {
         const msgEl = document.getElementById('confirm-message');
         const btnYes = document.getElementById('btn-confirm-yes');
+        const btnNo = document.getElementById('btn-confirm-no');
         if (msgEl) msgEl.textContent = message;
         
         if (btnYes) {
-            btnYes.onclick = async () => {
+            btnYes.onclick = async (e) => {
+                if (e) { e.preventDefault(); e.stopPropagation(); }
                 closeModal('modal-confirm');
                 if (onConfirm) await onConfirm();
+            };
+        }
+        if (btnNo) {
+            btnNo.onclick = (e) => {
+                if (e) { e.preventDefault(); e.stopPropagation(); }
+                closeModal('modal-confirm');
             };
         }
         openModal('modal-confirm');
