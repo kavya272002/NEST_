@@ -295,12 +295,12 @@
                 </div>
             </div>
             <div class="modal-footer" style="margin-top:1.25rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
-                <button id="btn-share-doc-modal" class="btn-primary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; flex:1;">
+                <button id="btn-share-doc-modal" type="button" class="btn-primary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; flex:1;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                     <span>Share Document</span>
                 </button>
                 <a id="detail-doc-download" class="btn-secondary" download target="_blank" style="display:none; flex:1; text-align:center; text-decoration:none; justify-content:center;">Download File</a>
-                <button id="btn-delete-doc-modal" class="btn-secondary" style="background:var(--danger-bg); color:var(--danger); border-color:transparent;">Delete</button>
+                <button id="btn-delete-doc-modal" type="button" class="btn-secondary" style="background:var(--danger-bg); color:var(--danger); border-color:transparent;">Delete</button>
             </div>
         </div>
     </div>
@@ -338,8 +338,8 @@
             </div>
             <p id="confirm-message" style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1.25rem;">Are you sure?</p>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
-                <button id="btn-confirm-yes" class="btn-primary" style="background:var(--danger);">Delete</button>
-                <button id="btn-confirm-no" class="btn-secondary modal-close" data-modal="modal-confirm">Cancel</button>
+                <button id="btn-confirm-yes" type="button" class="btn-primary" style="background:var(--danger);">Delete</button>
+                <button id="btn-confirm-no" type="button" class="btn-secondary modal-close" data-modal="modal-confirm">Cancel</button>
             </div>
         </div>
     </div>
