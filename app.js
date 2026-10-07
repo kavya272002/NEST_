@@ -300,55 +300,72 @@
         openModal('modal-doc-detail');
     }
 
+    function dataURLtoBlob(dataurl) {
+        try {
+            const arr = dataurl.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], { type: mime });
+        } catch (e) {
+            return null;
+        }
+    }
+
     async function shareDocument(id) {
         const doc = await DocumentDB.get(id);
         if (!doc) return;
 
         showToast('Preparing document...');
 
-        if (!doc.image) {
-            const shareText = `📌 *NEST Vault Document*\n\n📄 *Name:* ${doc.name}\n👤 *Member:* ${doc.holder || 'Self'}\n📂 *Category:* ${doc.category || 'General'}${doc.number ? `\n🔢 *Number:* ${doc.number}` : ''}`;
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: doc.name, text: shareText });
-                    return;
-                } catch (e) {}
+        const shareTitle = doc.name;
+        const shareText = `📌 *NEST Vault Document*\n📄 *Name:* ${doc.name}\n👤 *Member:* ${doc.holder || 'Self'}${doc.number ? `\n🔢 *Number:* ${doc.number}` : ''}`;
+
+        if (doc.image) {
+            try {
+                const blob = dataURLtoBlob(doc.image);
+                if (blob) {
+                    let ext = 'png';
+                    if (blob.type.includes('pdf')) ext = 'pdf';
+                    else if (blob.type.includes('jpeg') || blob.type.includes('jpg')) ext = 'jpg';
+                    else if (blob.type.includes('webp')) ext = 'webp';
+
+                    const fileName = `${doc.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.${ext}`;
+                    const file = new File([blob], fileName, { type: blob.type || 'image/png' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: shareTitle,
+                            text: shareText
+                        });
+                        showToast('Shared successfully');
+                        return;
+                    } else if (navigator.share) {
+                        await navigator.share({
+                            title: shareTitle,
+                            text: shareText
+                        });
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.warn('File share fallback:', err);
             }
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
-            return;
         }
 
-        try {
-            const res = await fetch(doc.image);
-            const blob = await res.blob();
-            
-            let ext = 'png';
-            if (blob.type.includes('pdf')) ext = 'pdf';
-            else if (blob.type.includes('jpeg') || blob.type.includes('jpg')) ext = 'jpg';
-            else if (blob.type.includes('webp')) ext = 'webp';
-
-            const fileName = `${doc.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.${ext}`;
-            const file = new File([blob], fileName, { type: blob.type || 'image/png' });
-
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    files: [file],
-                    title: doc.name,
-                    text: `NEST Document: ${doc.name}`
-                });
-                showToast('Shared successfully');
-            } else if (navigator.share) {
-                await navigator.share({
-                    title: doc.name,
-                    text: `Document: ${doc.name} (${doc.holder || 'NEST Locker'})`
-                });
-            } else {
-                const shareText = `📌 *NEST Vault Document*\n📄 *Name:* ${doc.name}\n👤 *Member:* ${doc.holder || 'Self'}`;
-                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
-            }
-        } catch (err) {
-            showToast('Sharing failed: ' + err.message);
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: shareTitle, text: shareText });
+                return;
+            } catch (e) {}
         }
+
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
     }
 
     async function deleteDocument(id, name) {

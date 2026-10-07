@@ -4,7 +4,7 @@
    "All-in-One Household Locker, always in your pocket."
    ═══════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'nest-locker-v1';
+const CACHE_NAME = 'nest-locker-v2';
 const OFFLINE_ASSETS = [
     './',
     './index.html',
@@ -12,7 +12,6 @@ const OFFLINE_ASSETS = [
     './app.js',
     './db.js',
     './translations.js',
-    './sync.js',
     './manifest.json',
     'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
     'https://unpkg.com/dexie@3.2.7/dist/dexie.min.js'
