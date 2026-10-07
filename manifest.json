@@ -1,0 +1,40 @@
+{
+    "name": "NEST — All-in-One Household Locker",
+    "short_name": "NEST",
+    "description": "Sovereign Family Document Locker. Store Marksheets, Aadhaar, PAN, Insurance & Property papers 100% locally.",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#F4F4F6",
+    "theme_color": "#18181B",
+    "categories": ["utilities", "lifestyle"],
+    "lang": "en-IN",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%2318181B'/%3E%3Cpath d='M96 40L40 84v68a8 8 0 0 0 8 8h96a8 8 0 0 0 8-8V84L96 40z' stroke='%23FFFFFF' stroke-width='10' fill='none'/%3E%3Ccircle cx='96' cy='115' r='16' stroke='%23FFFFFF' stroke-width='8' fill='none'/%3E%3C/svg%3E",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%2318181B'/%3E%3Cpath d='M256 100L100 220v180a20 20 0 0 0 20 20h272a20 20 0 0 0 20-20V220L256 100z' stroke='%23FFFFFF' stroke-width='24' fill='none'/%3E%3Ccircle cx='256' cy='300' r='45' stroke='%23FFFFFF' stroke-width='20' fill='none'/%3E%3C/svg%3E",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Add Document",
+            "short_name": "Add Doc",
+            "url": "./index.html#add-document",
+            "icons": [{"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='16' fill='%2318181B'/%3E%3Cpath d='M48 24v48M24 48h48' stroke='%23FFFFFF' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E", "sizes": "96x96"}]
+        }
+    ]
+}
+        }
+    ]
+}
