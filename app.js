@@ -100,6 +100,7 @@
         setupForms();
         setupExportImport();
         setupSettings();
+        setupInfoButton();
         setupLanguageToggle();
         setupDocumentSearch();
         setupFilePreview();
@@ -631,6 +632,13 @@
                 await refreshDocuments();
                 showToast(currentLang === 'hi' ? 'भाषा हिन्दी में बदली गई' : 'Language set to English');
             });
+        }
+    }
+
+    function setupInfoButton() {
+        const btn = document.getElementById('btn-info');
+        if (btn) {
+            btn.addEventListener('click', () => openModal('modal-info'));
         }
     }
 

@@ -623,6 +623,54 @@ body {
     margin-top: 0.25rem;
 }
 
+/* ── INFO MODAL ── */
+.info-modal-body {
+    text-align: left;
+}
+
+.info-lead {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.85rem;
+    line-height: 1.5;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.info-list li {
+    position: relative;
+    padding-left: 1.25rem;
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.info-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.info-footer {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
 /* ── MODAL SYSTEM ── */
 .modal-overlay {
     position: fixed;
